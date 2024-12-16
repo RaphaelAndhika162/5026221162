@@ -1,49 +1,64 @@
 @extends('template')
 
-@section('tulisan1','Data Pegawai')
+@section('headerPage', 'Data Pegawai')
 
-@section('link1')
-	<a href="/pegawai/tambah"> + Tambah Pegawai Baru</a>
-@endsection
+@section('content')
+	<div class="d-flex justify-content-between align-items-center mb-3">
+		<a href="/pegawai/tambah" class="btn btn-primary">
+			<i class="fa-solid fa-plus"></i> Tambah Pegawai Baru
+		</a>
 
-@section('konten')
-	<br/>
-    <p>Cari Data Pegawai :</p>
-	<form action="/pegawai/cari" method="GET">
-		<input type="text" name="cari" placeholder="Cari Pegawai .." value="{{ old('cari') }}">
-		<input type="submit" value="CARI"> class="btn btn-success"
-	</form>
-	<br/>
+		<!-- Search Form -->
+		<form action="/pegawai" method="GET" class="d-flex align-items-center">
+			<input type="text" name="cari" class="form-control me-2" placeholder="Cari Nama Pegawai" value="{{ request('cari') }}">
+			<input type="number" name="pagination" class="form-control me-2" placeholder="Pagination" value="{{ request('pagination', 10) }}" style="max-width: 100px;">
+			<button type="submit" class="btn btn-success">
+				<i class="fa-solid fa-magnifying-glass"></i>
+			</button>
+		</form>
+	</div>
 
-	<table class="table table-striped table-hover">
-		<tr>
-			<th>Nama</th>
-			<th>Jabatan</th>
-			<th>Umur</th>
-			<th>Alamat</th>
-			<th>Opsi</th>
-		</tr>
-		@foreach($pegawai as $p)
-		<tr>
-			<td>{{ $p->pegawai_nama }}</td>
-			<td>{{ $p->pegawai_jabatan }}</td>
-			<td>{{ $p->pegawai_umur }}</td>
-			<td>{{ $p->pegawai_alamat }}</td>
-			<td>
-				<a href="/pegawai/edit/{{ $p->pegawai_id }}" class="btn btn-info"><i class="fa-solid fa-pen-to-square"></i></a>
-				|
-				<a href="/pegawai/hapus/{{ $p->pegawai_id }}" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
-			</td>
-		</tr>
-		@endforeach
+	<table class="table table-bordered table-striped table-hover">
+		<thead class="table-dark">
+			<tr>
+				<th>Nama</th>
+				<th>Jabatan</th>
+				<th>Umur</th>
+				<th>Alamat</th>
+				<th>Aksi</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach($pegawai as $p)
+			<tr>
+				<td>{{ $p->pegawai_nama }}</td>
+				<td>{{ $p->pegawai_jabatan }}</td>
+				<td>{{ $p->pegawai_umur }}</td>
+				<td>{{ $p->pegawai_alamat }}</td>
+				<td class="text-center">
+					<a href="/pegawai/edit/{{ $p->pegawai_id }}" class="btn btn-warning btn-icon">
+						<i class="fa-solid fa-pen-to-square"></i>
+					</a>
+					<form action="/pegawai/hapus/{{ $p->pegawai_id }}" method="POST" style="display: inline;">
+						@csrf
+						@method('DELETE')
+						<button type="submit" class="btn btn-danger btn-icon">
+							<i class="fa-solid fa-trash"></i>
+						</button>
+					</form>
+				</td>
+			</tr>
+			@endforeach
+		</tbody>
 	</table>
-    <br/>
+
+	<br/>
 	Halaman : {{ $pegawai->currentPage() }} <br/>
 	Jumlah Data : {{ $pegawai->total() }} <br/>
 	Data Per Halaman : {{ $pegawai->perPage() }} <br/>
 
-
-	{{ $pegawai->links() }}
-
-</body>
-</html>
+	<!-- Pagination Links -->
+	<div class="d-flex justify-content-center px-2">
+		{{ $pegawai->appends(['cari' => request('cari'), 'pagination' => request('pagination')])->links() }}
+	</div>
+@endsection

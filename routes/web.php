@@ -2,6 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DosenController;
+use App\Http\Controllers\PegawaiController;
+use App\Http\Controllers\PegawaiDBController;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\TasController;
+use App\Http\Controllers\PengunjungController;
+use App\Http\Controllers\TugasController;
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,106 +25,51 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/ets', function () {
-    return view('ets');
-});
-
-Route::get('/biodata', function () {
-    return view('biodata');
-});
-
-Route::get('/blog', function () {
-    return view('blog');
-});
-
-Route::get('/edit', function () {
-    return view('edit');
-});
-
-Route::get('/formulir', function () {
-    return view('formulir');
-});
-
-Route::get('/form', function () {
-    return view('form');
-});
-
-Route::get('/home', function () {
-    return view('home');
-});
-
-Route::get('/index', function () {
-    return view('index');
-});
-
-Route::get('/kontak', function () {
-    return view('kontak');
-});
-
-Route::get('/master', function () {
-    return view('master');
-});
-
-Route::get('/tambah', function () {
-    return view('tambah');
-});
-
-Route::get('/tentang', function () {
-    return view('tentang');
-});
-
-Route::get('/testimonial', function () {
-    return view('testimonial');
-});
-
-Route::get('/mystyle', function () {
-    return view('mystyle');
-});
-
-Route::get('/stylelinktree', function () {
-    return view('stylelinktree');
-});
-
-Route::get('/linktree', function () {
-    return view('linktree');
-});
-
-Route::get('/responsive', function () {
-    return view('responsive');
-});
-
-Route::get('/style', function () {
-    return view('style');
-});
-
-Route::get('/style2', function () {
-    return view('style2');
-});
-
-Route::get('/styles_tugas1', function () {
-    return view('styles_tugas1');
-});
-
 Route::get('/error', function () {
     return "<h1>Server Error : Ada Kesalahan di Server</h1>";
 });
 
-Route::get('/blog', 'App\Http\Controllers\BlogController@home');
-Route::get('/blog/tentang', 'App\Http\Controllers\BlogController@tentang');
-Route::get('/blog/kontak', 'App\Http\Controllers\BlogController@kontak');
+Route::get('/blog', [BlogController::class, 'home']);
+Route::get('/blog/tentang', [BlogController::class, 'tentang']);
+Route::get('/blog/kontak', [BlogController::class, 'kontak']);
 
-Route::get('dosen', 'App\Http\Controllers\DosenController@index');
-Route::get('blog', 'App\Http\Controllers\DosenController@blog');
-Route::get('biodata', 'App\Http\Controllers\DosenController@biodata');
+Route::get('/dosen', [DosenController::class, 'index']);
+Route::get('/blog2', [DosenController::class, 'blog']);
+Route::get('/biodata', [DosenController::class, 'biodata']);
 
-// Route::get('/pegawai/{nama}', 'App\Http\Controllers\PegawaiController@index');
-Route::get('/formulir', 'App\Http\Controllers\PegawaiController@formulir');
-Route::post('/formulir/proses', 'App\Http\Controllers\PegawaiController@proses');
+Route::get('/formulir', [PegawaiController::class, 'formulir']);
+Route::post('/formulir/proses', [PegawaiController::class, 'proses']);
 
-Route::get('/pegawai','App\Http\Controllers\PegawaiDBController@index');
-Route::get('/pegawai/tambah','App\Http\Controllers\PegawaiDBController@tambah');
-Route::post('/pegawai/store','App\Http\Controllers\PegawaiController@store');
-Route::get('/pegawai/tambah','App\Http\Controllers\PegawaiDBController@edit');
-Route::post('/pegawai/store','App\Http\Controllers\PegawaiController@update');
-Route::get('/pegawai/tambah','App\Http\Controllers\PegawaiDBController@hapus');
-Route::get('/pegawai/cari','App\Http\Controllers\PegawaiDBController@cari');
+Route::get('/pegawai', [PegawaiDBController::class, 'index']);
+Route::get('/pegawai/tambah', [PegawaiDBController::class, 'tambah']);
+Route::post('/pegawai/store', [PegawaiDBController::class, 'store']);
+Route::get('/pegawai/edit/{id}', [PegawaiDBController::class, 'edit']);
+Route::get('/pegawai/update', [PegawaiDBController::class, 'update']);
+Route::get('/pegawai/hapus/{id}', [PegawaiDBController::class, 'hapus']);
+Route::get('/pegawai/cari', [PegawaiDBController::class, 'cari']);
+
+Route::get('/linktree', [TugasController::class, 'linktree']);
+Route::get('/week5', [TugasController::class, 'week5']);
+
+Route::get('/counter', function () {
+    $records = DB::table('pagecounter')->get();
+    if ($records->isNotEmpty()) {
+        $record = $records->first();
+        DB::table('pagecounter')->update(['Jumlah' => $record->Jumlah + 1]);
+    } else {
+        DB::table('pagecounter')->insert(['Jumlah' => 1]);
+    }
+
+    $updatedRecord = DB::table('pagecounter')->get()->first();
+
+    return view('counter', ['jumlah' => $updatedRecord->Jumlah]);
+});
+
+Route::get('/tas', [TasController::class, 'index']);
+Route::get('/tas/tambah', [TasController::class, 'tambah']);
+Route::post('/tas/store', [TasController::class, 'store']);
+Route::get('/tas/edit/{kodetas}', [TasController::class, 'editGet']);
+Route::post('/tas/edit/{kodetas}', [TasController::class, 'editPost']);
+Route::delete('/tas/hapus/{kodetas}', [TasController::class, 'delete']);
+
+Route::get('/pengunjung', [PengunjungController::class, 'index']);
