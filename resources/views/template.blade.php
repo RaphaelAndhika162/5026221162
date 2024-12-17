@@ -37,7 +37,7 @@
 <div class="container">
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
 		<div class="container-fluid">
-			<a class="navbar-brand" href="/">Viera Tito Virgiawan</a>
+			<a class="navbar-brand" href="/">Raphael Andhika Pratama</a>
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
@@ -47,7 +47,7 @@
 						<a class="nav-link" href="/pegawai">Pegawai</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="/laptop">Laptop</a>
+						<a class="nav-link" href="/tas">Tas</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="/eas">EAS</a>
@@ -58,7 +58,7 @@
 	</nav>
 
     <div class="container py-4">
-        <h3 class="mb-4 text-center">Viera Tito Virgiawan - 5026221096</h3>
+        <h3 class="mb-4 text-center">Raphael Andhika Pratama- 5026221162</h3>
         <h2 class="mb-4 text-center">@yield('headerPage')</h2>
 
         @yield('link1')
