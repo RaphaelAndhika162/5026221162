@@ -5,6 +5,7 @@ use App\Http\Controllers\DosenController;
 use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\PegawaiDBController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\TasController;
 use App\Http\Controllers\PengunjungController;
 use App\Http\Controllers\TugasController;
@@ -73,3 +74,4 @@ Route::post('/tas/edit/{kodetas}', [TasController::class, 'editPost']);
 Route::delete('/tas/hapus/{kodetas}', [TasController::class, 'delete']);
 
 Route::get('/pengunjung', [PengunjungController::class, 'index']);
+Route::resource('karyawan', KaryawanController::class);
